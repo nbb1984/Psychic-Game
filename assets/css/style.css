@@ -1,0 +1,12 @@
+body {
+	background-image: url("../images/zion_national_park.jpg");
+}
+ p {
+ 	font-size: 30px;
+ 	color: #ffffff;
+ 	/*text-shadow: 0 0 0.2px #ffffff;*/
+ }
+
+ #game {
+ 	padding-top: 60px;
+ }

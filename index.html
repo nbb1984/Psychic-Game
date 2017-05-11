@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<head>
+	<meta charset="UTF-8">
+	<title>Wild_West_Hangman!</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+<body>
+	<audio id ="hoedown">
+  		<source src='assets/music/(Disc 2) 04 - Rodeo_ Four Dance Episodes_ Rodeo_ Four Dance Episodes_ IV. Hoedown.mp3' type='audio/mp3'>;
+	</audio>
+  		
+  
+	<div class = "row">		
+		<div class = "col-md-1"></div>
+		<div class = "col-md-4">
+			<div id ="game">
+				<p>Ready to play Wild West Hangman? Press any key to start playing!</p> 
+			</div>
+		</div>
+		<div class = "col-md-6">
+			<div class = "hangman-face">
+				<img src ='assets/images/egg-tophat-goatee.png' alt= 'egg-tophat-goatee'/>;
+				
+			</div>
+			<div class ="col-md-1"></div>
+		</div>
+	</div>
+	<script type = "text/javascript">
+//telling the user to get started!
+		
+	
+	var wordBank = ["hilltop", "vegetable", "insect", "whale", "happiness", "life", "cardamum", "dwelling", "existentialism", "hijacking", "lithograph", "thorax", "sauna", "hot%dog", "zion%national%park"];
+	var guesses = 10;
+	var misses = 0;
+	var wins= 0;
+	//The count variable keeps track of duplicate correct answers(ie. happiness has two p's and two s's). This is so that my smileyFace images, which are indexed alongside my "misses" variable, remain in their proper order. 
+	var count = 0;
+	var wordToGuess = wordBank[Math.floor(Math.random()*wordBank.length)];
+	var wordSplit = wordToGuess.split("");
+	var blankSpace = new Array (wordToGuess.length);
+	var blankWord = blankSpace.fill("_ ");
+	
+	var blankWordJoin = blankWord.join(" ");
+	
+	var lettersGuessed = new Array()
+	var winner = "Press any key to make a guess!";
+	var smileyFace = ["<img src='assets/images/egg-with-no-face.png' alt='empty_smiley_face' />", "<img src ='assets/images/egg-with-no-eye.png' alt= 'eggface_with_no_eye'/>", "<img src ='assets/images/egg-with-no-eyebrow.png' alt= 'eggface_with_no_eyebrows'/>", "<img src ='assets/images/egg-full-face.png' alt= 'eggface_fullface'/>", "<img src ='assets/images/egg-full-face-mustache.png' alt= 'egg-full-face-mustache'/>", "<img src ='assets/images/egg-tophat.png' alt= 'egg-tophat'/>", "<img src ='assets/images/egg-tophat-goatee.png' alt= 'egg-tophat-goatee'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>", "<img src ='assets/images/demon_face.png' alt= 'demon_face'/>"];
+	var music = document.getElementById("hoedown");
+
+	
+	document.onkeyup = function () {
+
+			if (guesses > 0) {
+				winner: "Try to guess the correct letters!";
+				var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+				lettersGuessed.push(userGuess);
+			}
+				
+				for (var i = 0; i < wordSplit.length; i++) {
+					
+					if (userGuess === wordSplit[i]) { 
+						console.log("You guessed it!"); 
+	    				blankWord.splice(i, 1, userGuess);
+	    				wordSplit.splice(i, 1, "$");
+	    				console.log (blankWord);
+	    				count++;
+	    				guesses++;
+	    				wins++;	
+	    				misses--;
+					}
+
+				}
+				if (count > 1) {
+						guesses-=(count-1);
+						misses+= (count-1);
+						count = 0;
+				} else {
+					count = 0;
+				}
+
+					guesses--;
+					misses++;
+					document.querySelector(".hangman-face").innerHTML = smileyFace[misses];
+				
+			
+
+				
+				if (guesses === 0) {
+						winner = "Sorry partner, looks like you got caught by the sheriff!  Try again!  Press any key to get started!";
+						document.getElementById("hoedown").setAttribute("src", "assets/music/goodbadugly.mp3");
+						music.currentTime = 0;
+						music.play();
+						
+				}
+
+				if (wins === wordSplit.length) {
+						
+						winner = "You got away with the loot! Congratulations! Play Wild West Hangman Again! Press any key to get started!";
+						
+						document.getElementById("hoedown").setAttribute("src","assets/music/(Disc 2) 04 - Rodeo_ Four Dance Episodes_ Rodeo_ Four Dance Episodes_ IV. Hoedown.mp3");
+						music.currentTime = 40.5;
+						music.play();
+				}
+
+				if (guesses === 0 || wins === wordSplit.length) {
+					document.querySelector(".hangman-face").innerHTML = smileyFace[6];
+					guesses = 10;
+					wins = 0;
+					misses = 0;
+					wordToGuess = wordBank[Math.floor(Math.random()*wordBank.length)];
+					blankSpace = new Array (wordToGuess.length);
+					blankWord = blankSpace.fill("_ ");
+					lettersGuessed = new Array();
+					wordSplit = wordToGuess.split("");
+				}
+					
+					
+					
+
+
+				var html = "<p>" + winner + "</p>" +
+				"<p>Wins: " + wins + "</p>" +
+				"<p id='fill-in-the-blank'>" + blankWord.join(" ") + "</p>" +
+				"<p>Guesses Remaining:  " + guesses + "</p>" +
+				"<p>Your Guesses: " + lettersGuessed.join(" ") + "</p>";
+
+				document.querySelector("#game").innerHTML = html;
+
+		}
+	
+	
+	</script>
+</body>
+</html>
